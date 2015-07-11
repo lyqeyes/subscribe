@@ -14,12 +14,19 @@ class App extends React.Component {
     }
 
     sendEmail(data){
-        console.log(data);
+        //$.ajax({
+        //    type: "Get",
+        //    url: "/subscribe/"+data,
+        //    success: function(result){
+        //        alert(result);
+        //    }
+        //});
         $.ajax({
-            type: "Get",
-            url: "/subscribe/"+data,
-            success: function(data){
-                alert(data);
+            type: "Post",
+            url: "/subscribe",
+            data:{email:data},
+            success: function(result){
+                alert(result);
             }
         });
     }

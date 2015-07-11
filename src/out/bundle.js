@@ -415,12 +415,19 @@
 	    _createClass(App, [{
 	        key: "sendEmail",
 	        value: function sendEmail(data) {
-	            console.log(data);
+	            //$.ajax({
+	            //    type: "Get",
+	            //    url: "/subscribe/"+data,
+	            //    success: function(result){
+	            //        alert(result);
+	            //    }
+	            //});
 	            $.ajax({
-	                type: "Get",
-	                url: "/subscribe/" + data,
-	                success: function success(data) {
-	                    alert(data);
+	                type: "Post",
+	                url: "/subscribe",
+	                data: { email: data },
+	                success: function success(result) {
+	                    alert(result);
 	                }
 	            });
 	        }
@@ -473,6 +480,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _jsFormcheckJs = __webpack_require__(9);
+
+	var _jsFormcheckJs2 = _interopRequireDefault(_jsFormcheckJs);
+
 	var Main = (function (_React$Component) {
 	    function Main() {
 	        _classCallCheck(this, Main);
@@ -489,24 +500,29 @@
 	        value: function handlerKeyUp(event) {
 	            if (event.keyCode === 13) {
 	                var value = event.target.value;
-
-	                if (!value) return false;
-
-	                var data = value;
-
 	                event.target.value = "";
-
-	                this.props.sendEmail(data);
+	                if (!value) {
+	                    return false;
+	                }
+	                if (!_jsFormcheckJs2["default"].emailCheck(value)) {
+	                    $("#email").attr("placeholder", "illegal form of email, try again");
+	                    return false;
+	                }
+	                this.props.sendEmail(value);
 	            }
 	        }
 	    }, {
 	        key: "handleBtnClick",
 	        value: function handleBtnClick(event) {
 	            var value = event.target.parentNode.firstChild.value;
-	            if (!value) return false;
-
 	            event.target.parentNode.firstChild.value = "";
-
+	            if (!value) {
+	                return false;
+	            }
+	            if (!_jsFormcheckJs2["default"].emailCheck(value)) {
+	                $("#email").attr("placeholder", "illegal form of email, try again");
+	                return false;
+	            }
 	            this.props.sendEmail(value);
 	        }
 	    }, {
@@ -515,7 +531,7 @@
 	            return _react2["default"].createElement(
 	                "div",
 	                { className: "panel_footer" },
-	                _react2["default"].createElement("input", { onKeyUp: this.handlerKeyUp.bind(this), type: "text", className: "spirit_text", placeholder: "Input you email here" }),
+	                _react2["default"].createElement("input", { onKeyUp: this.handlerKeyUp.bind(this), type: "text", className: "spirit_text", id: "email", placeholder: "Input you email here" }),
 	                _react2["default"].createElement("br", null),
 	                _react2["default"].createElement("input", { onClick: this.handleBtnClick.bind(this), type: "button", className: "spirit_btn", value: "Subscribe Now" })
 	            );
@@ -527,6 +543,26 @@
 
 	exports["default"] = Main;
 	module.exports = exports["default"];
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by ���� on 2015/7/11.
+	 */
+	"use strict";
+
+	var regBox = {
+	    regEmail: /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
+	};
+	var formCheckUtil = {
+	    emailCheck: function emailCheck(email) {
+	        var mflag = regBox.regEmail.test(email);
+	        return mflag;
+	    }
+	};
+	module.exports = formCheckUtil;
 
 /***/ }
 /******/ ]);
